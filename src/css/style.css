@@ -1,0 +1,185 @@
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+
+/* Skin-Viewer */
+/* Allgemeines Styling */
+body {
+  font-family: "Press Start 2P", serif;
+  background-color: #121212;
+  color: #fff;
+  text-align: center;
+  background-image: url("/images/bg/2.jpg");
+  margin: 0;
+  padding: 0;
+}
+
+/* Container für den Skin-Viewer */
+.container {
+  margin-top: 50px;
+  height: 100%;
+}
+
+
+/* Canvas-Hintergrund */
+.canvas-container {
+  display: flex;
+  justify-content: center;
+  padding: 20px;
+}
+
+/* Canvas-Größe */
+#skin_container canvas {
+  width: 300px;
+  height: 400px;
+}
+
+/* Hintergrundbilder */
+.background-fade {
+  background-image: url("/images/bg/2.jpg");
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  opacity: 0; /* Startzustand unsichtbar */
+  transition: opacity 1s ease-in-out; /* Smooth Übergang */
+  z-index: -1; /* Hintergrundbild soll hinter anderen Elementen bleiben */
+  pointer-events: none; /* Verhindert, dass das Hintergrundbild mit der Benutzerinteraktion in Konflikt tritt */
+}
+
+/* Neue Bilder sichtbar machen */
+.background-fade.show {
+  opacity: 1; /* Fade-In beim Hinzufügen der Klasse "show" */
+}
+
+.stats-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px;
+}
+.stats {
+  padding-left: 20px;
+  padding-right: 20px;
+  text-align: start;
+  background-color: #abaaaa;
+  color: rgb(255, 255, 255);
+  border: 3.5px solid #000000;
+  text-shadow: 3px 1.5px 0px rgba(0,0,0,0.7);
+  box-shadow: 
+  -5px -4px 0px 1px rgba(77, 77, 77, 0.7) inset, 
+  200px 200px 0px -193.5px rgba(245, 245, 245, 0.5) inset;
+
+  -webkit-box-shadow: 
+    -5px -4px 0px 1px rgba(77, 77, 77, 0.7) inset, 
+    200px 200px 0px -193.5px rgba(245, 245, 245, 0.5) inset;
+
+  -moz-box-shadow: 
+    -5px -4px 0px 1px rgba(77, 77, 77, 0.7) inset, 
+    200px 200px 0px -193.5px rgba(245, 245, 245, 0.5) inset;
+}
+
+.stats div {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  border-radius: 2px;
+  padding: 8px;
+  padding-left: 16px;
+  padding-right: 16px;
+  background-color: #16131ff3;
+  border: 3px solid #252b60;
+}
+
+.stats .icon { vertical-align: middle; }
+
+/* ==================
+      Inventory
+   ================== 
+*/
+
+.inventory-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.inventory {
+  background-image: url('/images/inventory2.png');
+  width: 100%;
+  max-width: 500px;
+  aspect-ratio: 16/15.1;
+  background-size: cover;
+  image-rendering: pixelated;
+  position: relative;
+}
+
+.inventory .hotbar {
+  position: absolute;
+  top: 403.2px;
+  left: 18.3px;
+  width: 463.1px;
+  height: 51.2px;
+  background-color: blue;
+  display: grid;
+  grid-template-columns: repeat(9, 1fr);
+}
+
+.inventory .inv_container {
+  position: absolute;
+  top: 237px;
+  left: 18.3px;
+  width: 463.1px;
+  height: 155px;
+  background-color: red;
+  display: grid;
+  grid-template-columns: repeat(9, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+}
+
+.inventory .offhand {
+  position: absolute;
+  top: 174.8px;
+  left: 216.2px;
+  width: 50.2px;
+  height: 50.2px;
+  background-color: lime;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr;
+}
+
+.inventory .armor {
+  position: absolute;
+  top: 20px;
+  left: 18.3px;
+  width: 50.2px;
+  height: 204.1px;
+  background-color: orange;
+  display: grid;
+  grid-template-rows: repeat(4, 1fr);
+}
+
+.hotbar div, .inv_container div, .offhand div , .armor div {
+  margin: 6%;
+}
+
+.inventory-container div, .hotbar div, .offhand div, .armor div {
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  image-rendering: pixelated;
+}
+
+#inv-skin-container {
+  position: absolute;
+  background-color: cyan;
+  top: 20px;
+  left: 71px;
+  height: 202px;
+  width: 148px;
+}
