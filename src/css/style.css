@@ -51,29 +51,46 @@ body {
 .stats-container {
   width: 100%;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   margin-bottom: 20px;
 }
-.stats {
-  padding-left: 20px;
-  padding-right: 20px;
-  text-align: start;
-  background-color: #abaaaa;
-  color: rgb(255, 255, 255);
-  border: 3.5px solid #000000;
-  text-shadow: 3px 1.5px 0px rgba(0,0,0,0.7);
+
+.stats-header {
+  width: calc(500px - 24.8px);
+  background-color: #d4d4d4;
+  color: rgb(0, 0, 0);
+  padding: 10px;
+  border: none;
+  text-align: left;
+  font-size: 18px;
+  border: 2.5px solid #000000;
+  text-shadow: 2.2px 1.5px 0px rgba(0,0,0,0.7);
   box-shadow: 
   -5px -4px 0px 1px rgba(77, 77, 77, 0.7) inset, 
-  200px 200px 0px -193.5px rgba(245, 245, 245, 0.5) inset;
+  200px 200px 0px -193.5px rgba(254, 254, 254, 0.8) inset;
 
   -webkit-box-shadow: 
     -5px -4px 0px 1px rgba(77, 77, 77, 0.7) inset, 
-    200px 200px 0px -193.5px rgba(245, 245, 245, 0.5) inset;
+    200px 200px 0px -193.5px rgba(254, 254, 254, 0.8) inset;
 
   -moz-box-shadow: 
     -5px -4px 0px 1px rgba(77, 77, 77, 0.7) inset, 
-    200px 200px 0px -193.5px rgba(245, 245, 245, 0.5) inset;
+    200px 200px 0px -193.5px rgba(254, 254, 254, 0.8) inset;
+}
+
+
+.stats {
+  width: calc(480px - 24.8px);
+  padding-left: 20px;
+  padding-right: 20px;
+  text-align: start;
+  font-size: 1.6vh;
+  background-color: #16131ff3;
+  border: 3px solid #252b60;
+  color: rgb(255, 255, 255);
+
 }
 
 .stats div {
@@ -83,8 +100,7 @@ body {
   padding: 8px;
   padding-left: 16px;
   padding-right: 16px;
-  background-color: #16131ff3;
-  border: 3px solid #252b60;
+
 }
 
 .stats .icon { vertical-align: middle; }
@@ -96,6 +112,7 @@ body {
 
 .inventory-container {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   width: 100%;
@@ -113,10 +130,10 @@ body {
 
 .inventory .hotbar {
   position: absolute;
-  top: 403.2px;
-  left: 18.3px;
-  width: 463.1px;
-  height: 51.2px;
+  top: 85.5%;
+  left: 3.65%;
+  width: 92.6%;
+  height: 10.8%;
   background-color: blue;
   display: grid;
   grid-template-columns: repeat(9, 1fr);
@@ -124,10 +141,10 @@ body {
 
 .inventory .inv_container {
   position: absolute;
-  top: 237px;
-  left: 18.3px;
-  width: 463.1px;
-  height: 155px;
+  top: 50.3%;
+  left: 3.65%;
+  width: 92.6%;
+  height: 32.6%;
   background-color: red;
   display: grid;
   grid-template-columns: repeat(9, 1fr);
@@ -136,10 +153,10 @@ body {
 
 .inventory .offhand {
   position: absolute;
-  top: 174.8px;
-  left: 216.2px;
-  width: 50.2px;
-  height: 50.2px;
+  top: 37.1%;
+  left: 43.2%;
+  width: 10%;
+  height: 10.2%;
   background-color: lime;
   display: grid;
   grid-template-columns: 1fr;
@@ -148,10 +165,10 @@ body {
 
 .inventory .armor {
   position: absolute;
-  top: 20px;
-  left: 18.3px;
-  width: 50.2px;
-  height: 204.1px;
+  top: 4.27%;
+  left: 3.65%;
+  width: 10%;
+  height: 43.1%;
   background-color: orange;
   display: grid;
   grid-template-rows: repeat(4, 1fr);
@@ -170,10 +187,11 @@ body {
 
 #inv-skin-container {
   position: absolute;
-  top: 20px;
-  left: 71px;
-  height: 202px;
-  width: 148px;
+  background-color: cyan;
+  top: 4.27%;
+  left: 14.2%;
+  height: 43.1% !important;
+  width: 28.1% !important;
 }
 
 .nav {
@@ -197,3 +215,11 @@ body {
   text-decoration: underline;
 }
 
+@media (max-width: 768px) {
+  .stats, .stats-header {
+    width: 98%;
+  }
+  .stats {
+    padding-right: 0px;
+  }
+}
