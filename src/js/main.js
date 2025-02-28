@@ -1,5 +1,3 @@
-import * as skinview3d from "skinview3d";
-
 // Get uuid from query
 const uuid = getQueryParam("user");
 // Load skin with uuid
@@ -33,8 +31,8 @@ invViewer.controls.enableRotate = false;
 invViewer.controls.enableZoom = false;
 
 // Load player stats and both capes
-await loadStats(uuid);
-await loadCape(uuid);
+loadStats(uuid);
+loadCape(uuid);
 
 async function loadCape(uuid) {
   const url = `https://crafatar.com/capes/${uuid}`;
@@ -61,7 +59,7 @@ async function loadStats(uuid) {
 
   const statsContainer = document.querySelector('.stats');
   statsContainer.innerHTML = `
-    <div><img class="icon" src="/images/items/421-0.png" alt="username"> Username: ${data.name}</div>
+    <div><img class="icon" src="./images/items/421-0.png" alt="username"> Username: ${data.name}</div>
     ${hgStats}
   `;
 
@@ -71,16 +69,15 @@ async function loadStats(uuid) {
 async function loadHGLaborStats(uuid) {
   const response = await fetch(`https://api.hglabor.de/stats/ffa/${uuid}`)
   const data = await response.json();
-  console.log(data);
   const kdr = (data.deaths === 0) ? data.kills : (data.kills / data.deaths).toFixed(2);
 
   const stats = `
-  <div><img class="icon" src="/images/items/276-0.png" alt="kills"> Kills: ${data.kills}</div>
-  <div><img class="icon" src="/images/items/397-0.png" alt="deaths"> Deaths: ${data.deaths}</div>
-  <div><img class="icon" src="/images/items/327-0.png" alt="kdr"> KDR: ${kdr}</div>
-  <div><img class="icon" src="/images/items/266-0.png" alt="bounty"> Bounty: ${data.bounty}</div>
-  <div><img class="icon" src="/images/items/449-0.png" alt="top killstreak"> Highest Killstreak: ${data.highestKillStreak}</div>
-  <div><img class="icon" src="/images/items/377-0.png" alt="killstreak"> Current Killstreak: ${data.currentKillStreak}</div>
+  <div><img class="icon" src="./images/items/276-0.png" alt="kills"> Kills: ${data.kills}</div>
+  <div><img class="icon" src="./images/items/397-0.png" alt="deaths"> Deaths: ${data.deaths}</div>
+  <div><img class="icon" src="./images/items/327-0.png" alt="kdr"> KDR: ${kdr}</div>
+  <div><img class="icon" src="./images/items/266-0.png" alt="bounty"> Bounty: ${data.bounty}</div>
+  <div><img class="icon" src="./images/items/449-0.png" alt="top killstreak"> Highest Killstreak: ${data.highestKillStreak}</div>
+  <div><img class="icon" src="./images/items/377-0.png" alt="killstreak"> Current Killstreak: ${data.currentKillStreak}</div>
   `
   return stats;
 }

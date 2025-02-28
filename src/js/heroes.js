@@ -56,7 +56,7 @@ async function loadHeroes() {
                     const valueDiv = document.createElement("div");
                     const valueSpan = document.createElement("span");
                     const expImage = document.createElement("img");
-                    expImage.src = "/images/items/384-0.png";
+                    expImage.src = "./images/items/384-0.png";
                     valueSpan.textContent = `${value.experiencePoints} points`;
                     valueSpan.classList.add("ability-value");
                     valueDiv.appendChild(expImage)
