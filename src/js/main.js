@@ -18,6 +18,8 @@ viewer.animation = new skinview3d.IdleAnimation();
 viewer.controls.enableRotate = true;
 viewer.controls.enableZoom = false;
 viewer.zoom = 0.8;
+viewer.autoRotate = true;
+viewer.autoRotateSpeed = 0.65;
 
 // Create bottom inventory skin viewer
 const invViewer = new skinview3d.SkinViewer({
@@ -132,3 +134,43 @@ document.addEventListener("mousemove", (e) => {
 document.addEventListener("scroll", () => {
     updatePlayerRotation(lastMouseX, lastMouseY);
 });
+
+
+/* Skinn rotation timeout */
+
+let isDragging = false;
+let timeout;
+
+// Funktion zum Stoppen der Rotation
+function stopAutoRotate() {
+    viewer.autoRotate = false;
+    clearTimeout(timeout);
+    timeout = setTimeout(() => {
+        viewer.autoRotate = true;
+    }, 1000); // Nach 3 Sekunden Inaktivität AutoRotate wieder aktivieren
+}
+
+// Maus-Events für das Bewegen der Kamera
+viewer.canvas.addEventListener("mousedown", () => {
+    isDragging = true;
+    stopAutoRotate();
+});
+
+viewer.canvas.addEventListener("mouseup", () => {
+    isDragging = false;
+});
+
+viewer.canvas.addEventListener("mousemove", () => {
+    if (isDragging) {
+        stopAutoRotate();
+    }
+});
+
+// Touch-Events für mobile Geräte
+viewer.canvas.addEventListener("touchstart", stopAutoRotate);
+viewer.canvas.addEventListener("touchend", () => {
+    timeout = setTimeout(() => {
+        viewer.autoRotate = true;
+    }, 1000);
+});
+viewer.canvas.addEventListener("touchmove", stopAutoRotate);
