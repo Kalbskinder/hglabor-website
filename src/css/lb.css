@@ -171,3 +171,26 @@ tr .avatar {
   }
   
 }
+
+footer {
+  background-color: #151515;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+  width: 100%;
+  color: white;
+  padding: 25px;
+  text-align: center;
+  font-size: 12px;
+}
+
+footer a {
+  color: white;
+  text-decoration: none;
+}
+
+footer a:hover {
+  color: rgb(77, 191, 253);
+    text-decoration: underline;
+}
