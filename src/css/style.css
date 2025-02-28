@@ -1,39 +1,32 @@
 @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
 
-
-/* Skin-Viewer */
-/* Allgemeines Styling */
 body {
   font-family: "Press Start 2P", serif;
   background-color: #121212;
   color: #fff;
   text-align: center;
-  background-image: url("/images/bg/2.jpg");
+  background: url('/images/bg/2.jpg') no-repeat center center fixed;
+  background-size: cover;
   margin: 0;
   padding: 0;
 }
 
-/* Container für den Skin-Viewer */
 .container {
   margin-top: 50px;
   height: 100%;
 }
 
-
-/* Canvas-Hintergrund */
 .canvas-container {
   display: flex;
   justify-content: center;
   padding: 20px;
 }
 
-/* Canvas-Größe */
 #skin_container canvas {
   width: 300px;
   height: 400px;
 }
 
-/* Hintergrundbilder */
 .background-fade {
   background-image: url("/images/bg/2.jpg");
   position: fixed;
@@ -44,15 +37,15 @@ body {
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  opacity: 0; /* Startzustand unsichtbar */
-  transition: opacity 1s ease-in-out; /* Smooth Übergang */
-  z-index: -1; /* Hintergrundbild soll hinter anderen Elementen bleiben */
-  pointer-events: none; /* Verhindert, dass das Hintergrundbild mit der Benutzerinteraktion in Konflikt tritt */
+  opacity: 0;
+  transition: opacity 1s ease-in-out;
+  z-index: -1;
+  pointer-events: none;
 }
 
 /* Neue Bilder sichtbar machen */
 .background-fade.show {
-  opacity: 1; /* Fade-In beim Hinzufügen der Klasse "show" */
+  opacity: 1;
 }
 
 .stats-container {
@@ -177,7 +170,6 @@ body {
 
 #inv-skin-container {
   position: absolute;
-  background-color: cyan;
   top: 20px;
   left: 71px;
   height: 202px;

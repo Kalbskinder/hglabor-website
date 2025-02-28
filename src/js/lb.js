@@ -1,11 +1,11 @@
 async function getAllPlayers(page) {
     try {
         const players = await getPage(page)
-        const playerList = document.querySelector("#leaderboard tbody"); // Das <tbody> Element
+        const playerList = document.querySelector("#leaderboard tbody");
 
-        playerList.innerHTML = ""; // 🧹 Löscht alte Daten, falls schon vorhanden
+        playerList.innerHTML = "";
 
-        let counter = 1; // Zähler initialisieren
+        let counter = 1;
 
         for (const player of players) {
             const username = await getPlayer(player.playerId);
@@ -15,7 +15,6 @@ async function getAllPlayers(page) {
             const kdr = (deaths === 0) ? kills : (kills / deaths).toFixed(2);
             const avatarSrc = `https://crafatar.com/avatars/${player.playerId}`;
 
-            // 🛠 Richtige Tabellenstruktur erstellen
             const playerRow = document.createElement("tr");
             playerRow.classList.add("player-card")
             playerRow.setAttribute('onclick', `info('${player.playerId}')`);
@@ -32,7 +31,7 @@ async function getAllPlayers(page) {
             `;
 
             playerList.appendChild(playerRow);
-            counter++; // Zähler nach jeder Spielerzeile erhöhen
+            counter++;
         }
     } catch (error) {
         console.error('Fehler beim Laden der Spieler:', error);

@@ -1,37 +1,36 @@
 import * as skinview3d from "skinview3d";
 
-const canvas = document.getElementById("skin-container");
-const inv_canvas = document.getElementById("inv-skin-container");
-const button = document.getElementById("loadSkin");
-const input = document.getElementById("username");
-
+// Get uuid from query
 const uuid = getQueryParam("user");
+// Load skin with uuid
 const skinUrl = `https://crafatar.com/skins/${uuid}`;
 
 
-// Skin-Viewer erstellen
+// Create top skin viewer
 const viewer = new skinview3d.SkinViewer({
-    canvas: canvas,
+    canvas: document.getElementById("skin-container"),
     width: 300,
     height: 400,
     skin: skinUrl
 });
-
-const invViewer = new skinview3d.SkinViewer({
-  canvas: inv_canvas,
-  height: 202,
-  width: 140,
-  skin: skinUrl
-});
-
-invViewer.controls.enableRotate = true;
-invViewer.controls.enableZoom = false;
 
 viewer.animation = new skinview3d.IdleAnimation();
 viewer.controls.enableRotate = true;
 viewer.controls.enableZoom = false;
 viewer.zoom = 0.8;
 
+// Create bottom inventory skin viewer
+const invViewer = new skinview3d.SkinViewer({
+  canvas: document.getElementById("inv-skin-container"),
+  height: 202,
+  width: 140,
+  skin: skinUrl
+});
+
+invViewer.controls.enableRotate = false;
+invViewer.controls.enableZoom = false;
+
+// Load player stats and both capes
 await loadStats(uuid);
 await loadCape(uuid);
 
@@ -39,21 +38,21 @@ async function loadCape(uuid) {
   const url = `https://crafatar.com/capes/${uuid}`;
   const res = await fetch(url);
   if (res.status === 400) {
-    viewer.loadCape(null); // Kein Cape vorhanden, also null laden
-    invViewer.loadCape(null); // Kein Cape vorhanden, also null
+    viewer.loadCape(null);
+    invViewer.loadCape(null);
   } else if (res.ok) {
-    viewer.loadCape(url); // Cape existiert und wird geladen
-    invViewer.loadCape(url); // Cape existiert und wird geladen
+    viewer.loadCape(url);
+    invViewer.loadCape(url);
   } else {
     console.log(`User ${uuid} has no cape.`)
-    viewer.loadCape(null); // Setzt das Cape auf null, wenn es nicht geladen werden konnte
-    invViewer.loadCape(null); // Setzt das Cape auf null, wenn es nicht geladen werden konnte
+    viewer.loadCape(null);
+    invViewer.loadCape(null);
   }
 }
 
 async function loadStats(uuid) {
   const response = await fetch(`https://api.minetools.eu/uuid/${uuid}`);
-  const data = await response.json();  // `await` hinzufügen
+  const data = await response.json();
 
   const formattedUuid = formatUUID(uuid);
   const hgStats = await loadHGLaborStats(formattedUuid);
@@ -66,7 +65,7 @@ async function loadStats(uuid) {
 
 }
 
-
+// Get stats from hglabor api and load them as html
 async function loadHGLaborStats(uuid) {
   const response = await fetch(`https://api.hglabor.de/stats/ffa/${uuid}`)
   const data = await response.json();
@@ -84,12 +83,52 @@ async function loadHGLaborStats(uuid) {
   return stats;
 }
 
+// Formate uuids from normal string to string with dashes
 function formatUUID(uuid) {
   return uuid.replace(/^(.{8})(.{4})(.{4})(.{4})(.{12})$/, '$1-$2-$3-$4-$5');
 }
 
-// Funktion zum Parsen von URL-Parametern
+// Pares querey parameters
 function getQueryParam(param) {
   const urlParams = new URLSearchParams(window.location.search);
   return urlParams.get(param);
 }
+
+
+
+// Move head rotation to look at cursor
+let lastMouseX = 0;
+let lastMouseY = 0;
+
+function updatePlayerRotation(mouseX, mouseY) {
+    const rect = invViewer.canvas.getBoundingClientRect();
+    const centerX = rect.left + rect.width / 2;
+    const centerY = rect.top + rect.height / 2;
+
+    const diffX = (mouseX - centerX) / rect.width;
+    const diffY = (mouseY - centerY) / rect.height;
+
+    const maxAngleX = Math.PI / 25;
+    const maxAngleY = Math.PI / 18;
+    const bodyFactor = 0.5;
+
+    let rotX = -diffY * maxAngleY;
+    let rotY = -diffX * maxAngleX; 
+
+    const player = invViewer.playerObject;
+
+    player.skin.head.innerLayer.rotation.set(-rotX, -rotY, 0);
+    player.skin.head.outerLayer.rotation.set(-rotX, -rotY, 0);
+
+    player.rotation.set(-rotX * bodyFactor, -rotY * bodyFactor, 0);
+}
+
+document.addEventListener("mousemove", (e) => {
+    lastMouseX = e.clientX;
+    lastMouseY = e.clientY;
+    updatePlayerRotation(lastMouseX, lastMouseY);
+});
+
+document.addEventListener("scroll", () => {
+    updatePlayerRotation(lastMouseX, lastMouseY);
+});
