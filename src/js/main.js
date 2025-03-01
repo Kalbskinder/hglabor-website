@@ -171,3 +171,77 @@ viewer.canvas.addEventListener("touchend", () => {
     }, 1000);
 });
 viewer.canvas.addEventListener("touchmove", stopAutoRotate);
+
+/* =================================================================
+ *                      Inventory Items
+ * ================================================================= */
+
+async function fetchInventory(uuid, gm) {
+  const res = await fetch(`https://api.hglabor.de/ffa/inventory/${uuid}/${gm}`);
+  if (!res.ok) {
+      console.error(`Fehler: ${res.status} ${res.statusText}`);
+      return;
+  }
+
+  const data = await res.json();
+  const armor = {
+    helmet: fixAndParseJson(data.armor[3]),
+    chestplate: fixAndParseJson(data.armor[2]),
+    leggings: fixAndParseJson(data.armor[1]),
+    boots: fixAndParseJson(data.armor[0]),
+  }
+
+  console.log(armor);
+
+  const offhand = fixAndParseJson(data.offhand[0]);
+  const inventory = organizeInventory(data.main);
+  console.log(inventory);
+}
+
+
+function fixAndParseJson(brokenString) {
+  if (typeof brokenString !== "string") {
+      console.error("Not a string!", brokenString);
+      return null;
+  }
+
+  try {
+      // Remove \n
+      let fixedString = brokenString.replace(/\n/g, "").trim();
+      // Remove other random string stuff
+      fixedString = fixedString.replace(/([{,]\s*)(\w+)(\s*:)/g, '$1"$2"$3');
+
+      // Filters
+      // Return empty if string contains empty (no need to/can't parse)
+      if (fixedString === "EMPTY") {
+        return "EMPTY";
+      }
+      // Fix compass return bcs smth is broken with the raw given string from the api
+      if (fixedString.includes('"id": "minecraft:compass"')) {
+        fixedString = '{"data":[],"count":1,"id":"minecraft:compass"}';
+      }
+
+      const parsedData = JSON.parse(fixedString);
+
+      return parsedData;
+  } catch (error) {
+      console.error("JSON konnte nicht repariert werden:", error);
+      console.error("Fehlerhafter String:", brokenString);
+      return null;
+  }
+}
+
+function organizeInventory(mainData) {
+  const inventory = {};
+
+  mainData.forEach((itemStr, index) => {
+      const slotId = index + 1;  // Slots beginnen bei 1
+      const item = fixAndParseJson(itemStr);
+
+      inventory[slotId] = item;
+  });
+
+  return inventory;
+}
+
+fetchInventory(uuid, 'uhc')
