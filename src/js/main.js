@@ -191,11 +191,19 @@ async function fetchInventory(uuid, gm) {
     boots: fixAndParseJson(data.armor[0]),
   }
 
-  console.log(armor);
-
   const offhand = fixAndParseJson(data.offhand[0]);
-  const inventory = organizeInventory(data.main);
-  console.log(inventory);
+  const { inventoryItems, hotbarItems } = organizeInventory(data.main);
+
+  const armorSlots = document.querySelector('.armor')
+  const offhandSlot = document.querySelector('.offhand');
+  const inventorySlots = document.querySelector('.inv_container');
+  const hotbarSlots = document.querySelector('.hotbar');
+  console.log(offhand);
+
+  loadSlots(armorSlots, Object.values(armor));
+  loadSlots(offhandSlot, [offhand]);
+  loadSlots(inventorySlots, inventoryItems); // 3x9 Inventar
+  loadSlots(hotbarSlots, hotbarItems); // 1x9 Hotbar}
 }
 
 
@@ -214,7 +222,7 @@ function fixAndParseJson(brokenString) {
       // Filters
       // Return empty if string contains empty (no need to/can't parse)
       if (fixedString === "EMPTY") {
-        return "EMPTY";
+        return { id: "EMPTY" };
       }
       // Fix compass return bcs smth is broken with the raw given string from the api
       if (fixedString.includes('"id": "minecraft:compass"')) {
@@ -231,17 +239,70 @@ function fixAndParseJson(brokenString) {
   }
 }
 
-function organizeInventory(mainData) {
-  const inventory = {};
+function organizeInventory(main) {
+  const inventoryItems = []; // 3x9 Inventar
+  const hotbarItems = []; // 1x9 Hotbar
 
-  mainData.forEach((itemStr, index) => {
-      const slotId = index + 1;  // Slots beginnen bei 1
-      const item = fixAndParseJson(itemStr);
+  main.forEach((slot, index) => {
+      const parsedItem = fixAndParseJson(slot);
+      
+      if (parsedItem === "EMPTY" || !parsedItem) {
+          return; // Überspringt leere Slots
+      }
 
-      inventory[slotId] = item;
+      if (index < 9) {
+          hotbarItems.push(parsedItem); // Erste 9 Slots in die Hotbar
+      } else {
+          inventoryItems.push(parsedItem); // Der Rest ins Inventar
+      }
   });
 
-  return inventory;
+  return { inventoryItems, hotbarItems };
+}
+
+
+function loadSlots(targetContainer, items) {
+    // Stelle sicher, dass der Container existiert
+    if (!targetContainer || !Array.isArray(items)) {
+        console.error("Ungültige Parameter für loadSlots!");
+        return;
+    }
+
+    // Container leeren, um vorherige Elemente zu entfernen
+    targetContainer.innerHTML = "";
+
+    items.forEach((item, index) => {
+        if (!item || item === "EMPTY") {
+          const placeholder = document.createElement("div");
+          placeholder.classList.add("inventory-slot");
+          targetContainer.appendChild(placeholder);  
+          return;
+        }
+
+        // Extrahiere den Item-Namen (entferne "minecraft:")
+        const itemName = item.id.replace("minecraft:", "");
+
+        // Neues div-Element erstellen
+        const slot = document.createElement("div");
+        slot.classList.add("inventory-slot"); // Falls du spezifische Styles anwenden willst
+
+        // Hintergrundbild setzen
+        slot.style.backgroundImage = `url('./images/inventory/${itemName}.png')`;
+        slot.style.backgroundSize = "contain"; // Sicherstellen, dass das Bild vollständig sichtbar ist
+        slot.style.backgroundRepeat = "no-repeat";
+        slot.style.backgroundPosition = "center";
+
+        // Item-Anzahl als Text hinzufügen, falls vorhanden und größer als 1
+        if (item.count > 1) {
+            const countLabel = document.createElement("span");
+            countLabel.classList.add("item-count");
+            countLabel.textContent = item.count;
+            slot.appendChild(countLabel);
+        }
+
+        // Slot dem Container hinzufügen
+        targetContainer.appendChild(slot);
+    });
 }
 
 fetchInventory(uuid, 'uhc')
